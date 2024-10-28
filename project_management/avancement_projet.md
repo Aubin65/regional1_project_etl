@@ -14,3 +14,6 @@
 * Ajout de la doc pour installer google chrome + chromedriver depuis un terminal bash
 * Test des fonctions avec selenium pour selectionner éléments dynamiques sur un site web
  
+*26/10 :*
+* Connection SSH à la Raspberry PI
+* Ajout de la doc
