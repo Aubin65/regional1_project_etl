@@ -1,2 +1,0 @@
-Ce fichier est utilisé pour prendre des notes sur le projet. 
-La première chose à ajouter est d'utiliser le cache de streamlit pour les données de connexion à la base de données PostgreSQL.
