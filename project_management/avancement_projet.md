@@ -20,3 +20,6 @@
 
 *28/10:*
 * Ajout de la récupération des informations de la partie "match" de la page dans le fichier exploration.ipynb
+
+*29/10:*
+* Ajout de la récupération de l'url spécifique au joueur, manque à récupérer cela pour les deux équipes et pas seulement pour une 
