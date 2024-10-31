@@ -6,6 +6,7 @@ Réflexion sur le sujet 28/10 :
 Idée : faire une BDD Postgre qui va contenir les résultats des matchs de la poule de régionale 1
 
 Idées : 
+
 	• Graphe d'évolution du score
 	• Compositions avec temps de jeu global des joueurs, % de titularisation, ancienneté dans le club, nombre de points marqués au global -> isoler chaque joueur sur une autre page
 	• Statistiques perso du joueur : Cliquer sur le joueur qui est représenté sur le terrain 
@@ -13,7 +14,6 @@ Idées :
 	• Classements des équipes
 	• Temps de jeu de chaque joueur pour le match
 	• Ajouter lien vers la vidéo du match
-
 	• Pour chaque joueur -> id, nom, prénom, nom_ancien_club, anciennete_club
 	• Pour chaque match -> id, id_composition_equipe_1, nom_equipe_1, cartons_jaunes_equipe_1, nom_equipe_1
 	• Composition -> id, id_match, numéro_joueur, id_joueur
@@ -21,6 +21,8 @@ Idées :
 
 Pour avoir le nombre de pts marqués par une équipe dans un match spécifique: 
 
+```sql
 SELECT SUM(points)
 FROM Actions
 WHERE (id_match="selected_match") AND (id_equipe=(SELECT id FROM match WHERE nom_equipe_1="RCUJ"));
+```
