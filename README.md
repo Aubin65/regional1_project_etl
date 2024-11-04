@@ -18,6 +18,6 @@ BI :
 * Metabase
 
 Pour cela, je vais extraire des données depuis le site de la FFR qui permettront de mettre en place le modèle simple suivant dans les différents cas d'usage :
- 
-[data_model](/images/data_model.png)
+
+![data_model](/images/data_model.png)
 
