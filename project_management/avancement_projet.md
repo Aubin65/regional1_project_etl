@@ -30,4 +30,3 @@
 *04/11 :*
 * Ajout de la récupération de l'historique des clubs du joueur dans le fichier exploration.ipynb
 * Ajout du fichier data_model
-* Ajout d'une branche tests_bdd qui servira a faire un POC pour les bases de données HBase, MongoDB, Apache Cassandra et PostgreSQL
