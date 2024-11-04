@@ -1,41 +1,23 @@
-# regional1_project
+# Tests BDD
 
-Ce repository est utilisé pour alimenter la base de données contenant les données du championnat régionale 1 de rugby pour la saison 2023-2024
+Cette branche du repository regional1_project est utilisée pour faire des tests sur les technos suivantes : 
 
-Les technos utilisées seront PostgreSQL et Python. Les scripts seront orchestrés par Apache Airflow et la base de données sera hébergée sur une Raspberry Pi 4.
+BDD : 
+* HBase
+* MongoDB
+* Apache Cassandra
 
+Orchestration :
+* Apache Airflow
+* Apache Luigi
+* Apache NiFi
 
-## **Doc**
+BI : 
+* Power BI
+* Apache Superset
+* Metabase
 
-<u>Pour installer chrome sous un WSL :</u> 
-
-```bash
-sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo apt install ./google-chrome-stable_current_amd64.deb
-```
-
-
-<u>Pour installer le webdriver :</u>  
-
-Trouver sa version de chrome : google-chrome --version
-
-Trouver la version associée du webdriver : `https://developer.chrome.com/docs/chromedriver/downloads/version-selection?hl=fr`
-
-Par ex : `https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.69/linux64/chromedriver-linux64.zip`
-
-```bash
-sudo wget https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.69/linux64/chromedriver-linux64.zip
-sudo unzip chromedriver-linux64.zip
-sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-sudo rm -rf chromedriver-linux64.zip chromedriver-linux64
-sudo chmod +x /usr/local/bin/chromedriver
-chromedriver --version
-```
-
-Le chemin du fichier chromedriver est a utiliser dans la ligne de code suivante : 
-
-```python
-service = ChromeService(executable_path='/chemin/vers/chromedriver')
-driver = webdriver.Chrome(service=service, options=chrome_options)
-```
+Pour cela, je vais extraire des données depuis le site de la FFR qui permettront de mettre en place le modèle simple suivant dans les différents cas d'usage :
+ 
+[data_model](/images/data_model.png)
 
