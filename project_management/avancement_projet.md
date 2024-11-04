@@ -26,3 +26,6 @@
 
 *30/10 :*
 * Ajout de la récupération des deux équipes. Pour cela, il faut s'attarder sur la classe tabSelector qui contient deux éléments, le deuxième contenant les boutons avec les noms d'équipes et les switch entre les deux pages lorsque l'on clique dessus. Il faut aussi bien faire défiler la page avant d'utiliser button.click() sinon la fonction ne fonctionne pas
+
+*04/11 :*
+* Ajout de la récupération de l'historique des clubs du joueur dans le fichier exploration.ipynb
