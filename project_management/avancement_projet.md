@@ -29,3 +29,4 @@
 
 *04/11 :*
 * Ajout de la récupération de l'historique des clubs du joueur dans le fichier exploration.ipynb
+* Ajout du fichier data_model
