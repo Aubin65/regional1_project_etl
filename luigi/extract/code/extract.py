@@ -32,7 +32,8 @@ class ExtractJoueur(luigi.Task):
         """
         Cette fonction enregistre les données extraites au format JSON de manière temporaire
         """
-        return luigi.LocalTarget("../temp_storage/extracted_data.json")
+        # Déterminé à partir du répertoire dans lequel on lance le projet Luigi et pas à partir de celui dans lequel est le fichier extract.py
+        return luigi.LocalTarget("luigi/extract/temp_storage/extracted_data.json")
 
     def run(self):
 
@@ -54,7 +55,6 @@ class ExtractJoueur(luigi.Task):
         buttons = tab_selector[1].find_elements(By.TAG_NAME, "button")
 
         equipe_1, equipe_2 = tab_selector[1].text.strip().split("\n")
-        print(f"Equipe 1 : {equipe_1}\nEquipe 2 : {equipe_2}")
 
         # Extraire la composition
         try:
@@ -71,8 +71,8 @@ class ExtractJoueur(luigi.Task):
 
         # Extraire la composition
         try:
-            composition = {
-                f"{equipe_2}": {f"{i}": driver.find_element(By.ID, f"poste_{i}").text.strip() for i in range(1, 23)}
+            composition[f"{equipe_2}"] = {
+                f"{i}": driver.find_element(By.ID, f"poste_{i}").text.strip() for i in range(1, 23)
             }
             pprint(composition)
         except Exception as e:

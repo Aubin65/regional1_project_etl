@@ -2,9 +2,10 @@
 Cette partie est utilisée pour transformer le fichier créé par la partie extract de l'ETL Luigi
 """
 
-from ...extract.code.extract import ExtractJoueur
+from extract.code.extract import ExtractJoueur
 import luigi
 import json
+import os
 
 
 class TransformJoueur(luigi.Task):
@@ -24,13 +25,13 @@ class TransformJoueur(luigi.Task):
     """
 
     def requires(self):
-        return ExtractJoueur
+        return ExtractJoueur()
 
     def output(self):
         """
         Cette fonction enregistre les données extraites au format JSON de manière temporaire
         """
-        return luigi.LocalTarget("../temp_storage/transformed_data.json")
+        return luigi.LocalTarget("luigi/transform/temp_storage/transformed_data.json")
 
     def run(self):
         """
@@ -49,3 +50,8 @@ class TransformJoueur(luigi.Task):
 
         with self.output().open("w") as f:
             json.dump(transformed_data, f, indent=4)
+
+    def on_success(self):
+        os.remove("luigi/extract/temp_storage/extracted_data.json")
+        # os.remove(self.input().path)
+        print(f"{self.input().path} removed successfully !")
