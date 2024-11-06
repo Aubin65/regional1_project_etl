@@ -53,4 +53,6 @@ class TransformJoueur(luigi.Task):
 
     def on_success(self):
         os.remove("luigi/extract/temp_storage/extracted_data.json")
+        print("---------------------------------------------")
         print(f"{self.input().path} removed successfully !")
+        print("---------------------------------------------")
