@@ -11,10 +11,11 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.chrome.options import Options
+import os
 from pprint import pprint
 
 
-@dag(schedule=None, start_date=pendulum.datetime(2021, 1, 1, tz="UTC"), catchup=False, tags=["regional_1_etl"])
+@dag(schedule="@once", start_date=pendulum.datetime(2021, 1, 1, tz="UTC"), catchup=False, tags=["regional_1_etl"])
 def taskflow_regional():
 
     @task()
@@ -87,6 +88,7 @@ def taskflow_regional():
         """
         Tâche de chargement dans un fichier JSON de l'équipe souhaitée
         """
+        os.makedirs("airflow/data", exist_ok=True)
         with open("airflow/data/data.json", "w") as outfile:
             json.dump(transformed_data, outfile)
 
