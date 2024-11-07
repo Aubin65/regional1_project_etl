@@ -72,9 +72,7 @@ def taskflow_regional():
     @task()
     def transform(composition: dict) -> dict:
         """
-        Cette fonction va venir ouvrir le fichier de stockage temporaire en json et y apporter les modifications nécessaires :
-            - Passer les noms des joueurs en majuscules et enlever les espaces entre l'initiale et le nom
-            - Passer les noms des clubs en minuscule
+        Tâche de modification de la donnée
         """
 
         # Tâche de transformation de la donnée
