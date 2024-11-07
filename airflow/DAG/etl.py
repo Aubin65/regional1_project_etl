@@ -1,41 +1,27 @@
 """
-Cette partie est utilisée pour extraire la donnée depuis le site de la FFR
+Ce DAG va permettre d'extraire des données depuis une page WEB, de les transformer puis de les stocker au bon endroit dans le stockage local avant de faire des tests de BDD
 """
 
+# Import des librairies nécessaires
+import json
+from airflow.decorators import dag, task
+import pendulum
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.chrome.options import Options
 from pprint import pprint
-import luigi
-import json
 
 
-class ExtractJoueur(luigi.Task):
-    """Tâche permettant l'acquisition d'une équipe au format
-    compositions = {
-        nom_equipe_1: {
-            "1" : Initiale. Nom,
-            "2" : Initiale. Nom,
-            ...
-        }
-        nom_equipe_2: {
-            "1" : Initiale. Nom,
-            "2" : Initiale. Nom,
-            ...
-        }
-    }
-    """
+@dag(schedule=None, start_date=pendulum.datetime(2021, 1, 1, tz="UTC"), catchup=False, tags=["regional_1_etl"])
+def taskflow_regional():
 
-    def output(self):
+    @task()
+    def extract() -> dict:
         """
-        Cette fonction enregistre les données extraites au format JSON de manière temporaire
+        Tâche d'extraction de l'équipe souhaitée
         """
-        return luigi.LocalTarget("extracted_data.json")
-
-    def run(self):
-
         chrome_options = Options()
         chrome_options.add_argument("--headless")
 
@@ -54,7 +40,6 @@ class ExtractJoueur(luigi.Task):
         buttons = tab_selector[1].find_elements(By.TAG_NAME, "button")
 
         equipe_1, equipe_2 = tab_selector[1].text.strip().split("\n")
-        print(f"Equipe 1 : {equipe_1}\nEquipe 2 : {equipe_2}")
 
         # Extraire la composition
         try:
@@ -71,14 +56,43 @@ class ExtractJoueur(luigi.Task):
 
         # Extraire la composition
         try:
-            composition = {
-                f"{equipe_2}": {f"{i}": driver.find_element(By.ID, f"poste_{i}").text.strip() for i in range(1, 23)}
+            composition[f"{equipe_2}"] = {
+                f"{i}": driver.find_element(By.ID, f"poste_{i}").text.strip() for i in range(1, 23)
             }
             pprint(composition)
         except Exception as e:
             print("Joueur non trouvé", e)
 
-        with self.output().open("w") as f:
-            json.dump(composition, f, indent=4)
-
         driver.quit()
+
+        return composition
+
+    @task()
+    def transform(composition: dict) -> dict:
+        """
+        Cette fonction va venir ouvrir le fichier de stockage temporaire en json et y apporter les modifications nécessaires :
+            - Passer les noms des joueurs en majuscules et enlever les espaces entre l'initiale et le nom
+            - Passer les noms des clubs en minuscule
+        """
+
+        transformed_data = {
+            team.lower(): {poste: joueur.upper().replace(" ", "") for poste, joueur in composition[team].items()}
+            for team in composition
+        }
+
+        return transformed_data
+
+    @task()
+    def load(transformed_data: dict) -> None:
+        """
+        Tâche de chargement dans un fichier JSON de l'équipe souhaitée
+        """
+        with open("airflow/data/data.json", "w") as outfile:
+            json.dump(transformed_data, outfile)
+
+    composition = extract()
+    transformed_data = transform(composition)
+    load(transformed_data)
+
+
+taskflow_regional()
