@@ -69,14 +69,30 @@ def taskflow_regional():
         return composition
 
     @task()
-    def transform(composition: dict) -> dict:
+    def transform_1(composition: dict) -> dict:
         """
-        Tâche de modification de la donnée
+        Tâche de modification de la donnée numéro 1
         """
 
         # Tâche de transformation de la donnée
         transformed_data = {
             team.lower(): {poste: joueur.upper().replace(" ", "") for poste, joueur in composition[team].items()}
+            for team in composition
+        }
+
+        return transformed_data
+
+    @task()
+    def transform_2(composition: dict) -> dict:
+        """
+        Tâche de modification de la donnée numéro 2
+        """
+
+        # Tâche de transformation de la donnée
+        transformed_data = {
+            team.upper(): {
+                poste: joueur.upper().replace(" ", "").replace(".", " ") for poste, joueur in composition[team].items()
+            }
             for team in composition
         }
 
@@ -96,14 +112,11 @@ def taskflow_regional():
             json.dump(transformed_data, outfile)
 
     # Lancement des fonctions d'ETL
-    composition_1 = extract(
+    composition = extract(
         "https://competitions.ffr.fr/competitions/nouvelle-aquitaine-regionale-1-championnat-territorial/match-1428351.html"
     )
-    composition_2 = extract(
-        "https://competitions.ffr.fr/competitions/nouvelle-aquitaine-regionale-1-championnat-territorial/match-1428356.html"
-    )
-    transformed_data_1 = transform(composition_1)
-    transformed_data_2 = transform(composition_2)
+    transformed_data_1 = transform_1(composition)
+    transformed_data_2 = transform_2(composition)
     load(transformed_data_1, "airflow/data/data_1/data.json")
     load(transformed_data_2, "airflow/data/data_2/data.json")
 
