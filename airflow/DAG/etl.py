@@ -91,7 +91,7 @@ def taskflow_regional():
         # Tâche de transformation de la donnée
         transformed_data = {
             team.upper(): {
-                poste: joueur.upper().replace(" ", "").replace(".", " ") for poste, joueur in composition[team].items()
+                poste: joueur.upper().replace(" ", "").split(".")[1] for poste, joueur in composition[team].items()
             }
             for team in composition
         }
