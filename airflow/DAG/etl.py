@@ -3,7 +3,6 @@ Ce DAG va permettre d'extraire des données depuis une page WEB, de les transfor
 """
 
 # Import des librairies nécessaires
-import json
 from airflow.decorators import dag, task
 import pendulum
 from selenium import webdriver
@@ -11,8 +10,8 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.chrome.options import Options
-import os
 from pprint import pprint
+import pymongo
 
 
 @dag(schedule="@once", start_date=pendulum.datetime(2021, 1, 1, tz="UTC"), catchup=False, tags=["regional_1_etl"])
@@ -99,17 +98,36 @@ def taskflow_regional():
         return transformed_data
 
     @task()
-    def load(transformed_data: dict, dir: str) -> None:
-        """
-        Tâche de chargement dans un fichier JSON de l'équipe souhaitée
-        """
+    def connect_and_insert(transformed_data: dict):
+        # URL de connexion MongoDB (si MongoDB est sur le même serveur que Airflow)
+        mongo_uri = "mongodb://localhost:27017/"
 
-        # Création du repo s'il n'existe pas
-        os.makedirs(os.path.dirname(dir), exist_ok=True)
+        # Connexion à la base de données MongoDB
+        client = pymongo.MongoClient(mongo_uri)
 
-        # Chargement des données
-        with open(dir, "w") as outfile:
-            json.dump(transformed_data, outfile)
+        # Sélection de la base de données et de la collection
+        db = client["test_db"]
+        collection = db["compositions"]
+
+        # Insertion des données dans MongoDB
+        collection.insert_one(transformed_data)
+
+        # Fermeture de la connexion
+        client.close()
+
+    # Test avec stockage en JSON
+    # @task()
+    # def load(transformed_data: dict, dir: str) -> None:
+    #     """
+    #     Tâche de chargement dans un fichier JSON de l'équipe souhaitée
+    #     """
+
+    #     # Création du repo s'il n'existe pas
+    #     os.makedirs(os.path.dirname(dir), exist_ok=True)
+
+    #     # Chargement des données
+    #     with open(dir, "w") as outfile:
+    #         json.dump(transformed_data, outfile)
 
     # Lancement des fonctions d'ETL
 
@@ -120,11 +138,14 @@ def taskflow_regional():
 
     # Différentes transformations
     transformed_data_1 = transform_1(composition)
-    transformed_data_2 = transform_2(composition)
+    # transformed_data_2 = transform_2(composition)
+
+    # Transformation de la donnée
+    # load(transformed_data_1, "airflow/data/data_1/data.json")
+    # load(transformed_data_2, "airflow/data/data_2/data.json")
 
     # Chargement de la donnée
-    load(transformed_data_1, "airflow/data/data_1/data.json")
-    load(transformed_data_2, "airflow/data/data_2/data.json")
+    connect_and_insert(transformed_data=transformed_data_1)
 
 
 # Lancement global de la fonction
