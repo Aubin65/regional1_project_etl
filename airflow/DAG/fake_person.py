@@ -65,7 +65,7 @@ def fake_person():
         # Fermeture de la connexion
         client.close()
 
-    person_list = extract(100000)
+    person_list = extract(500000)
     connect_and_insert(person_list)
 
 
