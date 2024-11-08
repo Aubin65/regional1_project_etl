@@ -50,6 +50,16 @@ def fake_person():
         ]
 
     @task()
+    def transform(person_list: list):
+
+        for elem in person_list:
+            elem.pop("Nom complet")
+            elem["Poids (g)"] = elem.pop("Poids (kg)") * 1000
+            elem["Taille (m)"] = elem.pop("Taille (cm)") / 100
+
+        return person_list
+
+    @task()
     def connect_and_insert(person_list: list):
 
         mongo_uri = "mongodb://localhost:27017/"
@@ -65,8 +75,8 @@ def fake_person():
         # Fermeture de la connexion
         client.close()
 
-    person_list = extract(500000)
-    connect_and_insert(person_list)
+    person_list = extract(50000)
+    connect_and_insert(transform(person_list))
 
 
 # Lancement global de la fonction
