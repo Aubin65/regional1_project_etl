@@ -112,11 +112,17 @@ def taskflow_regional():
             json.dump(transformed_data, outfile)
 
     # Lancement des fonctions d'ETL
+
+    # Extraction de la donnée
     composition = extract(
         "https://competitions.ffr.fr/competitions/nouvelle-aquitaine-regionale-1-championnat-territorial/match-1428351.html"
     )
+
+    # Différentes transformations
     transformed_data_1 = transform_1(composition)
     transformed_data_2 = transform_2(composition)
+
+    # Chargement de la donnée
     load(transformed_data_1, "airflow/data/data_1/data.json")
     load(transformed_data_2, "airflow/data/data_2/data.json")
 
