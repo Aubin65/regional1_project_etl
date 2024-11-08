@@ -19,7 +19,7 @@ from pprint import pprint
 def taskflow_regional():
 
     @task()
-    def extract() -> dict:
+    def extract(path: str) -> dict:
         """
         Tâche d'extraction de l'équipe souhaitée
         """
@@ -30,9 +30,8 @@ def taskflow_regional():
         service = ChromeService(executable_path="/usr/bin/chromedriver")
         driver = webdriver.Chrome(service=service, options=chrome_options)
 
-        # URl de la compétition
-        url_match = "https://competitions.ffr.fr/competitions/nouvelle-aquitaine-regionale-1-championnat-territorial/match-1428351.html"
-        driver.get(url_match)
+        # URL de la compétition
+        driver.get(path)
 
         # Attendre que la page charge
         time.sleep(3)
@@ -84,22 +83,29 @@ def taskflow_regional():
         return transformed_data
 
     @task()
-    def load(transformed_data: dict) -> None:
+    def load(transformed_data: dict, dir: str) -> None:
         """
         Tâche de chargement dans un fichier JSON de l'équipe souhaitée
         """
 
         # Création du repo s'il n'existe pas
-        os.makedirs("airflow/data", exist_ok=True)
+        os.makedirs(os.path.dirname(dir), exist_ok=True)
 
         # Chargement des données
-        with open("airflow/data/data.json", "w") as outfile:
+        with open(dir, "w") as outfile:
             json.dump(transformed_data, outfile)
 
     # Lancement des fonctions d'ETL
-    composition = extract()
-    transformed_data = transform(composition)
-    load(transformed_data)
+    composition_1 = extract(
+        "https://competitions.ffr.fr/competitions/nouvelle-aquitaine-regionale-1-championnat-territorial/match-1428351.html"
+    )
+    composition_2 = extract(
+        "https://competitions.ffr.fr/competitions/nouvelle-aquitaine-regionale-1-championnat-territorial/match-1428356.html"
+    )
+    transformed_data_1 = transform(composition_1)
+    transformed_data_2 = transform(composition_2)
+    load(transformed_data_1, "airflow/data/data_1/data.json")
+    load(transformed_data_2, "airflow/data/data_2/data.json")
 
 
 # Lancement global de la fonction
