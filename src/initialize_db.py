@@ -6,3 +6,5 @@ Ce fichier est utilisé pour l'initialisation de la base de données PostgreSQL 
 from psql_functions import connect_db, disconnect_db, execute_request  # noqa
 
 conn, cursor = connect_db(name="test", user="test", pwd="test")
+
+rows = execute_request()
