@@ -39,3 +39,38 @@ service = ChromeService(executable_path='/chemin/vers/chromedriver')
 driver = webdriver.Chrome(service=service, options=chrome_options)
 ```
 
+<u>Pour communiquer entre PostgreSQL et Python :</u> 
+
+```bash
+# Installation de la librairie
+pip install psycopg2-binary
+```
+
+```python
+import psycopg2
+
+# Connexion à la base de données
+conn = psycopg2.connect(
+    dbname="ma_base",
+    user="mon_utilisateur",
+    password="mon_mot_de_passe",
+    host="localhost",
+    port="5432"
+)
+
+# Création d'un curseur pour exécuter des commandes SQL
+cursor = conn.cursor()
+
+# Exécution d'une requête
+cursor.execute("SELECT * FROM ma_table;")
+
+# Récupération des résultats
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
+
+# Fermeture du curseur et de la connexion
+cursor.close()
+conn.close()
+```
