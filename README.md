@@ -39,12 +39,45 @@ service = ChromeService(executable_path='/chemin/vers/chromedriver')
 driver = webdriver.Chrome(service=service, options=chrome_options)
 ```
 
+<u>Installation et création d'une base de données :</u>
+
+```bash
+sudo apt update && sudo apt upgrade -y
+
+# Installer PostgreSQL
+sudo apt install postgresql postgresql-contrib -y
+
+# Vérifier si PostgreSQL est installé
+sudo service postgresql status
+
+# Démarrer le serveur PostgreSQL
+sudo service postgresql start
+
+# Accéder à PostgreSQL 
+sudo -u postgres psql
+
+# Quitter la console PostgreSQL
+\q
+```
+
+<u>Pour configurer la base de données PostgreSQL :</u>
+
+```sql
+CREATE USER mon_utilisateur WITH PASSWORD 'mon_mot_de_passe';
+
+CREATE DATABASE ma_base_de_donnees;
+
+GRANT ALL PRIVILEGES ON DATABASE ma_base_de_donnees TO mon_utilisateur;
+```
+
 <u>Pour communiquer entre PostgreSQL et Python :</u> 
 
 ```bash
 # Installation de la librairie
 pip install psycopg2-binary
 ```
+
+Puis pour se connecter à la base depuis Python :
 
 ```python
 import psycopg2
@@ -74,3 +107,6 @@ for row in rows:
 cursor.close()
 conn.close()
 ```
+
+<u>Pour créer la base de données PostgreSQL :</u> 
+
