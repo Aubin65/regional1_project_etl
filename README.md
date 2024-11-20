@@ -107,6 +107,3 @@ for row in rows:
 cursor.close()
 conn.close()
 ```
-
-<u>Pour créer la base de données PostgreSQL :</u> 
-
