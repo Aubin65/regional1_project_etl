@@ -25,6 +25,8 @@ def connect_db(
 
     Returns
     -------
+    psycopg2.extensions.connection
+        variable de connexion à la base de données
     psycopg2.extensions.cursor
         curseur d'exécution des requêtes SQL
     """
@@ -56,7 +58,7 @@ def disconnect_db(conn: psycopg2.extensions.connection, cursor: psycopg2.extensi
     conn.close()
 
 
-def executer_request(request: str, cursor: psycopg2.extensions.cursor) -> list[tuple]:
+def execute_request(request: str, cursor: psycopg2.extensions.cursor) -> list[tuple]:
     """Exécute une requête SQL
 
     Parameters
