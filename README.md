@@ -107,3 +107,9 @@ for row in rows:
 cursor.close()
 conn.close()
 ```
+
+<u>Extensions conseillées</u>
+
+* python-string-sql de Peter Weir
+* Flake8 et Black Formatter de Microsoft
+* autoDocstring - Python Docstring Generator de Nils Werner
