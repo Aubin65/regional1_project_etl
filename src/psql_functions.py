@@ -58,8 +58,8 @@ def disconnect_db(conn: psycopg2.extensions.connection, cursor: psycopg2.extensi
     conn.close()
 
 
-def execute_request(request: str, cursor: psycopg2.extensions.cursor) -> list[tuple]:
-    """Exécute une requête SQL
+def execute_request(request: str, cursor: psycopg2.extensions.cursor) -> list[tuple] | None:
+    """Exécute une requête SQL avec différentiation si on a une requête SELECT ou non pouur le résultat
 
     Parameters
     ----------
@@ -70,24 +70,26 @@ def execute_request(request: str, cursor: psycopg2.extensions.cursor) -> list[tu
 
     Returns
     -------
-    list[tuple]
-        résultat de la requête
+    list[tuple] | None
+        résultat de la requête si on utilise une requête SQL, sinon None
     """
 
     try:
         # Exécution de la requête
         cursor.execute(request)
 
-        # Récupération des lignes
-        rows = cursor.fetchall()
+        # Quand on est dans le cas d'une requête SELECT
+        if request.startswith("SELECT"):
 
-        # Affichage des résultats
-        for row in rows:
-            print(row)
+            # Récupération des lignes
+            rows = cursor.fetchall()
 
-        return rows
+            # Affichage des résultats
+            for row in rows:
+                print(row)
+
+            return rows
 
     except psycopg2.Error as e:
         # Gestion des erreurs
         print(f"Une erreur s'est produite lors de l'exécution de la requête : {e}")
-        return []  # Retourner une liste vide en cas d'erreur
