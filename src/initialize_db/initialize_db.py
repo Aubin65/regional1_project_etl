@@ -35,7 +35,7 @@ steps = [
 for step in steps:
 
     # Récupération de la requête
-    with open(step, "r") as file:
+    with open(os.path.join("requests", step), "r") as file:
         request = file.read()
 
     # Exécution de la requête
