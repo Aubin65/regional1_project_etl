@@ -34,3 +34,4 @@
 *20/11 :*
 * Ajout de documentation dans le fichier [README.md](https://github.com/Aubin65/regional1_project_etl/blob/test_branch/README.md)
 * Ajout du fichier [psql_functions.py](https://github.com/Aubin65/regional1_project_etl/blob/test_branch/src/psql_functions.py) initialisant les fonctions de connexion et déconnexion à la base de donnée PostgreSQL via Python
+
