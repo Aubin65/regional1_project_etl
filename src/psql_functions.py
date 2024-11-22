@@ -78,7 +78,7 @@ def execute_request(request: str, cursor: psycopg2.extensions.cursor) -> list[tu
         # Exécution de la requête
         cursor.execute(request)
 
-        # Quand on est dans le cas d'une requête SELECT
+        # Quand on est dans le cas d'une requête SELECT, on récupère les résultats
         if request.startswith("SELECT"):
 
             # Récupération des lignes
