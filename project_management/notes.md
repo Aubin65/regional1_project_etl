@@ -26,3 +26,13 @@ SELECT SUM(points)
 FROM Actions
 WHERE (id_match="selected_match") AND (id_equipe=(SELECT id FROM match WHERE nom_equipe_1="RCUJ"));
 ```
+
+Idées de stratégie pour ne pas collecter plusieurs fois les mêmes données :
+
+* Stocker les URLs dans la base de données PostgreSQL (par exemple lié aux équipes), scrapper seulement si l'URL n'est pas dans la table URL
+	* Question : est-ce qu'on crée une table url ou est-ce qu'on met l'url dans la table match, qu'on viendra requêter ?
+		* Piste : Je pense que c'est mieux de le mettre dans la table match car on peut faire un 
+		```sql
+		SELECT DISTINCT(url)
+		FROM match;
+		```
