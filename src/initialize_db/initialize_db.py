@@ -34,11 +34,11 @@ steps = [
 
 for step in steps:
 
-    # Récupération de la requête
+    # Récupération de la requête dans le dossier requests
     with open(os.path.join("requests", step), "r") as file:
         request = file.read()
 
-    # Exécution de la requête
+    # Exécution de la requête avec la fonction prédéfinie
     execute_request(request=request, cursor=cursor)
 
 # Déconnexion de la base de données
